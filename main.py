@@ -16,10 +16,16 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_response(200) # Отправка кода ответа
         self.send_header("Content-type", "text/html") # Отправка типа данных, который будет передаваться
         self.end_headers() # Завершение формирования заголовков ответа
-        with open("pages/contacts.html", encoding="utf-8") as data:
-            page=data.read()
-        self.wfile.write(bytes(page, "utf-8")) # Тело ответа
 
+        if self.path == '/': #проверяем первичный запрос к серверу
+            with open("pages/contacts.html", encoding="utf-8") as data:
+                page=data.read()
+            self.wfile.write(bytes(page, "utf-8")) # Тело ответа
+
+        else:
+            with open(f"pages/{self.path}", encoding="utf-8") as data:
+                page = data.read()
+            self.wfile.write(bytes(page, "utf-8"))  # Тело ответа
 
 
 if __name__ == "__main__":
